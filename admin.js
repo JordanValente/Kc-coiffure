@@ -12,6 +12,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminGalleryGrid = document.getElementById('adminGalleryGrid');
     const adminFileInput = document.getElementById('adminFileInput');
 
+    // 0. --- TEST DE CONNEXION FIREBASE ---
+    get(ref(db, '.info/connected')).then((snapshot) => {
+        if (snapshot.val() === true) {
+            console.log("Connecté à Firebase !");
+        } else {
+            console.error("Non connecté à Firebase. Vérifiez vos règles de sécurité (Mode Test).");
+        }
+    });
+
+    // 0b. --- MIGRATION AUTO (LocalStorage -> Firebase) ---
+    // Si Firebase est vide mais que LocalStorage a des données, on les pousse.
+    async function migrateToCloud() {
+        const snapshot = await get(galleryRef);
+        if (!snapshot.exists()) {
+            console.log("Cloud vide, tentative de migration depuis LocalStorage...");
+            const localData = JSON.parse(localStorage.getItem('kcGalleryData') || '[]');
+            if (localData.length > 0) {
+                await set(galleryRef, localData);
+                console.log("Galerie migrée vers Firebase !");
+            }
+            // Pareil pour contact et tarifs...
+            const localContact = JSON.parse(localStorage.getItem('kcContactData'));
+            if (localContact) await set(contactRef, localContact);
+            
+            const localPricing = JSON.parse(localStorage.getItem('kcPricingData'));
+            if (localPricing) await set(pricingRef, localPricing);
+        }
+    }
+    migrateToCloud();
+
     // 1. --- DONNÉES CONTACT ---
     const contactRef = ref(db, 'contactData');
     onValue(contactRef, (snapshot) => {
