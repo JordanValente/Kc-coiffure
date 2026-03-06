@@ -128,12 +128,14 @@
     </script>
 
     <div class="admin-container">
-        <!-- Zone d'ajout -->
-        <div class="admin-upload">
-            <h3 style="color: var(--color-pink);">Ajouter de nouvelles photos</h3>
-            <p style="color: var(--color-text-muted); margin-bottom: 15px;">Formats acceptés : JPG, PNG</p>
+        <!-- Zone d'ajout (Infos) -->
+        <div class="admin-upload" style="background: rgba(255,192,203,0.05); border: 1px dashed var(--color-pink);">
+            <h3 style="color: var(--color-pink);">Gestion des Photos</h3>
+            <p style="color: white; margin-bottom: 10px;">La galerie utilise désormais les images du dossier <strong>/photos/</strong> de votre projet.</p>
+            <p style="color: var(--color-text-muted); font-size: 0.9rem;">
+                Pour ajouter de nouvelles photos : Déposez-les simplement dans le dossier <code>photos</code> sur votre ordinateur ou directement sur GitHub, puis validez les changements. Elles apparaîtront ici automatiquement pour que vous puissiez modifier leur texte.
+            </p>
             <input type="file" id="adminFileInput" accept="image/*" multiple style="display: none;">
-            <button class="btn btn-primary" onclick="document.getElementById('adminFileInput').click()">Parcourir mes fichiers</button>
         </div>
 
         <!-- Section Hero / Accueil -->

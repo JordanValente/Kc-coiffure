@@ -41,38 +41,44 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
-// 2. --- GALERIE DEPUIS FIREBASE ---
+// 2. --- GALERIE DEPUIS DOSSIER LOCAL ---
 const galleryGrid = document.getElementById('galleryGrid');
-const defaultImages = [
-    { src: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=800", text: "Brushing Élégant" },
-    { src: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&q=80&w=800", text: "Coupe Carré" },
-    { src: "https://images.unsplash.com/photo-1595476108010-b4d1f10d5e43?auto=format&fit=crop&q=80&w=800", text: "Balayage" }
+// Liste manuelle des photos dans le dossier /photos (obligatoire car JS navigateur ne peut pas scanner un dossier)
+const localPhotos = [
+    "1434906464948649969.JPG", "2428389859622835158.JPG", "2442986605621758912.JPG", 
+    "295341576070224355.JPG", "5843544016896871159.JPG", "5878086769404283240.JPG", 
+    "6762477278438249809.JPG", "7081114608800117376.JPG", "7929391502948490040.JPG",
+    "8777824078707904769.HEIC"
 ];
 
-function renderGallery(images) {
+function renderGallery(galleryTexts) {
     if(!galleryGrid) return;
     galleryGrid.innerHTML = '';
-    const imgsToDisplay = (images && images.length > 0) ? images : defaultImages;
-    imgsToDisplay.forEach(imgObj => {
+    
+    // On boucle sur nos photos locales
+    localPhotos.forEach(filename => {
+        // On récupère le texte éventuellement personnalisé dans Firebase, sinon "Réalisation"
+        const text = (galleryTexts && galleryTexts[filename]) ? galleryTexts[filename] : "Réalisation";
+        
         const div = document.createElement('div');
         div.className = 'gallery-item';
         div.style.animation = 'fadeIn 0.5s ease-out';
         div.innerHTML = `
-            <img src="${imgObj.src}" alt="Photo de galerie">
-            <div class="gallery-overlay"><span>${imgObj.text}</span></div>
+            <img src="photos/${filename}" alt="Photo de coiffure">
+            <div class="gallery-overlay"><span>${text}</span></div>
         `;
         galleryGrid.appendChild(div);
     });
 }
 
-// Chargement initial
-onValue(ref(db, 'galleryData'), (snapshot) => {
-    const data = snapshot.val();
-    console.log("Données galerie reçues:", data);
-    renderGallery(data);
+// On écoute maintenant 'galleryTexts' au lieu de 'galleryData' (qui contenait les URLs Firebase Storage)
+onValue(ref(db, 'galleryTexts'), (snapshot) => {
+    const texts = snapshot.val();
+    console.log("Légendes reçues:", texts);
+    renderGallery(texts);
 }, (error) => {
     console.error("Erreur Firebase Galerie:", error);
-    renderGallery(defaultImages); // Fallback en cas d'erreur de permission
+    renderGallery({}); // Affiche les photos avec textes par défaut
 });
 
 // 3. --- CONTACT DEPUIS FIREBASE ---

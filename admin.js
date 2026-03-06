@@ -183,67 +183,47 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
-    // 3. --- DONNÉES GALERIE ---
-    const galleryRef = ref(db, 'galleryData');
-    let savedImages = [];
+    // 3. --- DONNÉES GALERIE (PHOTOS LOCALES) ---
+    const localPhotos = [
+        "1434906464948649969.JPG", "2428389859622835158.JPG", "2442986605621758912.JPG", 
+        "295341576070224355.JPG", "5843544016896871159.JPG", "5878086769404283240.JPG", 
+        "6762477278438249809.JPG", "7081114608800117376.JPG", "7929391502948490040.JPG",
+        "8777824078707904769.HEIC"
+    ];
 
-    onValue(galleryRef, (snapshot) => {
-        const data = snapshot.val();
-        savedImages = data || [];
-        renderGallery();
+    const galleryTextsRef = ref(db, 'galleryTexts');
+    let currentTexts = {};
+
+    onValue(galleryTextsRef, (snapshot) => {
+        currentTexts = snapshot.val() || {};
+        renderAdminGallery();
     });
 
-    function renderGallery() {
+    function renderAdminGallery() {
         if(!adminGalleryGrid) return;
         adminGalleryGrid.innerHTML = '';
         
-        if (savedImages.length === 0) {
-            adminGalleryGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-text-muted);">Aucune photo dans la galerie pour le moment.</p>';
-            return;
-        }
-
-        savedImages.forEach((imgObj, index) => {
+        localPhotos.forEach(filename => {
+            const text = currentTexts[filename] || "Réalisation";
             const div = document.createElement('div');
             div.className = 'admin-item';
             
             div.innerHTML = `
-                <img src="${imgObj.src}" alt="Photo de galerie">
-                <input type="text" value="${imgObj.text}" data-index="${index}" class="img-text-input" placeholder="Texte sur l'image">
-                <button class="btn-delete" data-index="${index}" data-storage-path="${imgObj.storagePath || ''}">🗑</button>
+                <img src="photos/${filename}" alt="Photo de galerie">
+                <input type="text" value="${text}" data-filename="${filename}" class="local-img-text-input" placeholder="Texte sur l'image">
+                <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 5px;">${filename}</p>
             `;
             
             adminGalleryGrid.appendChild(div);
         });
 
-        // Suppressions
-        document.querySelectorAll('.btn-delete').forEach(button => {
-            button.addEventListener('click', async (e) => {
-                const index = parseInt(e.target.getAttribute('data-index'));
-                const storagePath = e.target.getAttribute('data-storage-path');
-                
-                if (confirm('Voulez-vous vraiment supprimer cette photo de la base de données publique ?')) {
-                    // Supprimer du storage si c'est une image uploadée
-                    if(storagePath) {
-                        try {
-                            const imgRef = storageRef(storage, storagePath);
-                            await deleteObject(imgRef);
-                        } catch(err) {
-                            console.error("Erreur suppression image:", err);
-                        }
-                    }
-                    
-                    savedImages.splice(index, 1);
-                    set(galleryRef, savedImages);
-                }
-            });
-        });
-
         // Édition du texte
-        document.querySelectorAll('.img-text-input').forEach(input => {
+        document.querySelectorAll('.local-img-text-input').forEach(input => {
             input.addEventListener('change', (e) => {
-                const index = parseInt(e.target.getAttribute('data-index'));
-                savedImages[index].text = e.target.value;
-                set(galleryRef, savedImages).then(() => {
+                const filename = e.target.getAttribute('data-filename');
+                currentTexts[filename] = e.target.value;
+                
+                set(galleryTextsRef, currentTexts).then(() => {
                     e.target.style.borderColor = "#4ade80";
                     setTimeout(() => e.target.style.borderColor = "var(--color-pink)", 1000);
                 });
@@ -251,46 +231,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. --- UPLOAD GALERIE VIA FIREBASE STORAGE ---
+    // Note: L'upload via admin est désactivé pour la galerie car on utilise le dossier local.
+    // L'utilisateur doit ajouter les fichiers dans le dossier /photos/ sur son ordi/GitHub.
     if(adminFileInput) {
-        adminFileInput.addEventListener('change', function() {
-            const files = this.files;
-            if (!files || files.length === 0) return;
-
-            Array.from(files).forEach(file => {
-                if (!file.type.startsWith('image/')) return;
-                
-                // Petit indicateur de chargement
-                adminFileInput.previousElementSibling.innerText = "Téléchargement en cours...";
-
-                let reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onloadend = async function() {
-                    try {
-                        // 1. Upload dans storage
-                        const fileName = 'gallery/' + Date.now() + '_' + file.name;
-                        const imgStorageRef = storageRef(storage, fileName);
-                        
-                        await uploadString(imgStorageRef, reader.result, 'data_url');
-                        const downloadUrl = await getDownloadURL(imgStorageRef);
-                        
-                        // 2. Ajouter dans Realtime Database
-                        savedImages.unshift({ 
-                            src: downloadUrl, 
-                            text: "Nouvelle Réalisation",
-                            storagePath: fileName
-                        });
-                        
-                        await set(galleryRef, savedImages);
-                        
-                    } catch(error) {
-                        alert("Erreur lors de l'upload: " + error.message);
-                    } finally {
-                        adminFileInput.value = '';
-                        adminFileInput.previousElementSibling.innerText = "Formats acceptés : JPG, PNG";
-                    }
-                };
-            });
-        });
+        adminFileInput.parentElement.style.display = 'none'; // On cache la zone d'upload
     }
 });
