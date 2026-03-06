@@ -136,8 +136,26 @@
             <button class="btn btn-primary" onclick="document.getElementById('adminFileInput').click()">Parcourir mes fichiers</button>
         </div>
 
+        <!-- Section Hero / Accueil -->
+        <h3 style="margin-top: 60px;">🏠 Texte de la Page d'Accueil (Hero)</h3>
+        <div class="admin-section">
+            <div class="admin-form-group">
+                <label>Sous-titre (petit texte rose)</label>
+                <input type="text" id="heroSubtitle" placeholder="Coiffure à Domicile">
+            </div>
+            <div class="admin-form-group">
+                <label>Titre principal (grand titre blanc)</label>
+                <input type="text" id="heroTitle" placeholder="L'art de la coiffure chez vous">
+            </div>
+            <div class="admin-form-group">
+                <label>Description</label>
+                <textarea id="heroDesc" rows="3" style="width:100%;padding:10px;background:var(--color-black);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:5px;font-family:var(--font-body);"></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="saveHero()">Sauvegarder Hero</button>
+        </div>
+
         <!-- Gestion des Textes & Contact -->
-        <h3 style="margin-top: 60px;">📝 Infos Générales & Contact</h3>
+        <h3>📝 Infos Générales & Contact</h3>
         <div class="admin-section">
             <div class="flex-row">
                 <div class="admin-form-group">
@@ -153,19 +171,66 @@
         </div>
 
         <!-- Gestion des Tarifs -->
-        <h3>💶 Gestion des Tarifs (Prestations Base)</h3>
-        <div class="admin-section" id="adminPricingBase">
-            <!-- Rempli par JS -->
+        <h3>💶 Titres des cartes de Tarifs</h3>
+        <div class="admin-section">
+            <div class="flex-row">
+                <div class="admin-form-group">
+                    <label>Titre Carte 1</label>
+                    <input type="text" id="cardTitle1" placeholder="Prestations Base">
+                </div>
+                <div class="admin-form-group">
+                    <label>Sous-titre Carte 1</label>
+                    <input type="text" id="cardSub1" placeholder="À la carte">
+                </div>
+            </div>
+            <div class="flex-row">
+                <div class="admin-form-group">
+                    <label>Titre Carte 2</label>
+                    <input type="text" id="cardTitle2" placeholder="Soins">
+                </div>
+                <div class="admin-form-group">
+                    <label>Sous-titre Carte 2</label>
+                    <input type="text" id="cardSub2" placeholder="Douceur">
+                </div>
+            </div>
+            <div class="flex-row">
+                <div class="admin-form-group">
+                    <label>Titre Carte 3</label>
+                    <input type="text" id="cardTitle3" placeholder="Techniques">
+                </div>
+                <div class="admin-form-group">
+                    <label>Sous-titre Carte 3</label>
+                    <input type="text" id="cardSub3" placeholder="Sur-mesure">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="saveCardTitles()">Sauvegarder les Titres</button>
         </div>
 
-        <h3>🌸 Gestion des Tarifs (Soins)</h3>
-        <div class="admin-section" id="adminPricingSoins">
-            <!-- Rempli par JS -->
-        </div>
+        <h3>💶 Prestations (Carte 1)</h3>
+        <div class="admin-section" id="adminPricingBase"><!-- Rempli par JS --></div>
 
-        <h3>✂️ Gestion des Tarifs (Techniques)</h3>
-        <div class="admin-section" id="adminPricingTech">
-            <!-- Rempli par JS -->
+        <h3>🌸 Soins (Carte 2)</h3>
+        <div class="admin-section" id="adminPricingSoins"><!-- Rempli par JS --></div>
+
+        <h3>✂️ Techniques (Carte 3)</h3>
+        <div class="admin-section" id="adminPricingTech"><!-- Rempli par JS --></div>
+
+        <!-- Footer -->
+        <h3 style="margin-top: 60px;">👣 Texte du Pied de page</h3>
+        <div class="admin-section">
+            <div class="admin-form-group">
+                <label>Texte de description du site</label>
+                <input type="text" id="footerDesc" placeholder="Votre experte coiffure à domicile.">
+            </div>
+            <div class="admin-form-group">
+                <label>Disponibilités (ex: Du Lundi au Samedi)</label>
+                <input type="text" id="footerDays" placeholder="Du Lundi au Samedi">
+            </div>
+            <div class="admin-form-group">
+                <label>Type de rendez-vous</label>
+                <input type="text" id="footerAppt" placeholder="Sur rendez-vous uniquement">
+            </div>
+            <button class="btn btn-primary" onclick="saveFooter()">Sauvegarder Footer</button>
         </div>
 
         <!-- Galerie existante -->

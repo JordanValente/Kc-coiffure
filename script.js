@@ -99,4 +99,43 @@ onValue(ref(db, 'pricingData'), (snapshot) => {
     renderPublicPricing(data.tech, 'publicPricingTech');
 });
 
+// 5. --- HERO DEPUIS FIREBASE ---
+onValue(ref(db, 'heroData'), (snapshot) => {
+    const data = snapshot.val();
+    if (!data) return;
+    const sub = document.getElementById('publicHeroSubtitle');
+    const title = document.getElementById('publicHeroTitle');
+    const desc = document.getElementById('publicHeroDesc');
+    if(sub) sub.innerText = data.subtitle;
+    if(title) title.innerText = data.title;
+    if(desc) desc.innerText = data.desc;
+});
 
+// 6. --- TITRES CARTES TARIFS DEPUIS FIREBASE ---
+onValue(ref(db, 'cardTitles'), (snapshot) => {
+    const data = snapshot.val();
+    if (!data) return;
+    const setEl = (id, val) => { const el = document.getElementById(id); if(el && val) el.innerText = val; };
+    setEl('pubCardTitle1', data.title1); setEl('pubCardSub1', data.sub1);
+    setEl('pubCardTitle2', data.title2); setEl('pubCardSub2', data.sub2);
+    setEl('pubCardTitle3', data.title3); setEl('pubCardSub3', data.sub3);
+});
+
+// 7. --- FOOTER DEPUIS FIREBASE ---
+onValue(ref(db, 'footerData'), (snapshot) => {
+    const data = snapshot.val();
+    if (!data) return;
+    const setEl = (id, val) => { const el = document.getElementById(id); if(el && val) el.innerText = val; };
+    setEl('publicFooterDesc', data.desc);
+    setEl('publicFooterDays', data.days);
+    setEl('publicFooterAppt', data.appt);
+});
+
+// Sync contact footer as well
+onValue(ref(db, 'contactData'), (snapshot) => {
+    const data = snapshot.val();
+    if (!data) return;
+    const setEl = (id, val) => { const el = document.getElementById(id); if(el && val) el.innerText = val; };
+    setEl('publicFooterPhone', data.phone);
+    setEl('publicFooterEmail', data.email);
+});

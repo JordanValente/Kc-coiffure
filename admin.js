@@ -31,6 +31,69 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // 1b. --- DONNÉES HERO ---
+    const heroRef = ref(db, 'heroData');
+    onValue(heroRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            document.getElementById('heroSubtitle').value = data.subtitle || '';
+            document.getElementById('heroTitle').value = data.title || '';
+            document.getElementById('heroDesc').value = data.desc || '';
+        }
+    });
+
+    window.saveHero = function() {
+        set(heroRef, {
+            subtitle: document.getElementById('heroSubtitle').value,
+            title: document.getElementById('heroTitle').value,
+            desc: document.getElementById('heroDesc').value
+        }).then(() => alert("Hero sauvegardé en ligne !"));
+    };
+
+    // 1c. --- TITRES DES CARTES ---
+    const cardTitlesRef = ref(db, 'cardTitles');
+    onValue(cardTitlesRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            document.getElementById('cardTitle1').value = data.title1 || '';
+            document.getElementById('cardSub1').value = data.sub1 || '';
+            document.getElementById('cardTitle2').value = data.title2 || '';
+            document.getElementById('cardSub2').value = data.sub2 || '';
+            document.getElementById('cardTitle3').value = data.title3 || '';
+            document.getElementById('cardSub3').value = data.sub3 || '';
+        }
+    });
+
+    window.saveCardTitles = function() {
+        set(cardTitlesRef, {
+            title1: document.getElementById('cardTitle1').value,
+            sub1: document.getElementById('cardSub1').value,
+            title2: document.getElementById('cardTitle2').value,
+            sub2: document.getElementById('cardSub2').value,
+            title3: document.getElementById('cardTitle3').value,
+            sub3: document.getElementById('cardSub3').value
+        }).then(() => alert("Titres des cartes sauvegardés !"));
+    };
+
+    // 1d. --- DONNÉES FOOTER ---
+    const footerRef = ref(db, 'footerData');
+    onValue(footerRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            document.getElementById('footerDesc').value = data.desc || '';
+            document.getElementById('footerDays').value = data.days || '';
+            document.getElementById('footerAppt').value = data.appt || '';
+        }
+    });
+
+    window.saveFooter = function() {
+        set(footerRef, {
+            desc: document.getElementById('footerDesc').value,
+            days: document.getElementById('footerDays').value,
+            appt: document.getElementById('footerAppt').value
+        }).then(() => alert("Footer sauvegardé en ligne !"));
+    };
+
     // 2. --- DONNÉES TARIFS ---
     const pricingRef = ref(db, 'pricingData');
     
