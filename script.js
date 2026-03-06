@@ -49,10 +49,11 @@ const defaultImages = [
     { src: "https://images.unsplash.com/photo-1595476108010-b4d1f10d5e43?auto=format&fit=crop&q=80&w=800", text: "Balayage" }
 ];
 
-onValue(ref(db, 'galleryData'), (snapshot) => {
+function renderGallery(images) {
+    if(!galleryGrid) return;
     galleryGrid.innerHTML = '';
-    const images = snapshot.val() || defaultImages;
-    images.forEach(imgObj => {
+    const imgsToDisplay = (images && images.length > 0) ? images : defaultImages;
+    imgsToDisplay.forEach(imgObj => {
         const div = document.createElement('div');
         div.className = 'gallery-item';
         div.style.animation = 'fadeIn 0.5s ease-out';
@@ -62,6 +63,16 @@ onValue(ref(db, 'galleryData'), (snapshot) => {
         `;
         galleryGrid.appendChild(div);
     });
+}
+
+// Chargement initial
+onValue(ref(db, 'galleryData'), (snapshot) => {
+    const data = snapshot.val();
+    console.log("Données galerie reçues:", data);
+    renderGallery(data);
+}, (error) => {
+    console.error("Erreur Firebase Galerie:", error);
+    renderGallery(defaultImages); // Fallback en cas d'erreur de permission
 });
 
 // 3. --- CONTACT DEPUIS FIREBASE ---
