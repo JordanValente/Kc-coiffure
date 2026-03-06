@@ -1,3 +1,7 @@
+import { db, storage } from './firebase-config.js';
+import { ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+import { ref as storageRef, uploadString, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+
 // --- SÉCURITÉ : Vérification de la connexion ---
 if (sessionStorage.getItem('kc_admin_logged_in') !== 'true') {
     window.location.href = 'login.html';
@@ -9,20 +13,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminFileInput = document.getElementById('adminFileInput');
 
     // 1. --- DONNÉES CONTACT ---
-    const defaultContact = { phone: "06 XX XX XX XX", email: "kc.coiffureadomicile@gmail.com" };
-    let contactData = JSON.parse(localStorage.getItem('kcContactData')) || defaultContact;
-    
-    document.getElementById('adminPhone').value = contactData.phone;
-    document.getElementById('adminEmail').value = contactData.email;
+    const contactRef = ref(db, 'contactData');
+    onValue(contactRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            document.getElementById('adminPhone').value = data.phone || '';
+            document.getElementById('adminEmail').value = data.email || '';
+        }
+    });
 
     window.saveContact = function() {
-        contactData.phone = document.getElementById('adminPhone').value;
-        contactData.email = document.getElementById('adminEmail').value;
-        localStorage.setItem('kcContactData', JSON.stringify(contactData));
-        alert("Contact sauvegardé !");
+        set(contactRef, {
+            phone: document.getElementById('adminPhone').value,
+            email: document.getElementById('adminEmail').value
+        }).then(() => {
+            alert("Contact sauvegardé en ligne !");
+        });
     };
 
     // 2. --- DONNÉES TARIFS ---
+    const pricingRef = ref(db, 'pricingData');
+    
+    // Par défaut si vide
     const defaultPricing = {
         base: [
             { name: "Coupe Femme / Homme", price: "25€ / 15€" },
@@ -41,10 +53,21 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     };
 
-    let pricingData = JSON.parse(localStorage.getItem('kcPricingData')) || defaultPricing;
+    let localPricingData = defaultPricing;
+
+    onValue(pricingRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            localPricingData = data;
+        }
+        renderPricingCategory(localPricingData.base || [], 'adminPricingBase', 'base');
+        renderPricingCategory(localPricingData.soins || [], 'adminPricingSoins', 'soins');
+        renderPricingCategory(localPricingData.tech || [], 'adminPricingTech', 'tech');
+    });
 
     function renderPricingCategory(items, categoryId, categoryKey) {
         const container = document.getElementById(categoryId);
+        if(!container) return;
         let html = '';
         items.forEach((item, index) => {
             html += `
@@ -61,39 +84,24 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = html;
     }
 
-    renderPricingCategory(pricingData.base, 'adminPricingBase', 'base');
-    renderPricingCategory(pricingData.soins, 'adminPricingSoins', 'soins');
-    renderPricingCategory(pricingData.tech, 'adminPricingTech', 'tech');
-
     window.updatePricing = function(category, index, key, value) {
-        pricingData[category][index][key] = value;
-        localStorage.setItem('kcPricingData', JSON.stringify(pricingData));
+        localPricingData[category][index][key] = value;
+        set(pricingRef, localPricingData);
     };
 
 
     // 3. --- DONNÉES GALERIE ---
-    let savedDataRaw = localStorage.getItem('kcGalleryData');
+    const galleryRef = ref(db, 'galleryData');
     let savedImages = [];
 
-    if (!savedDataRaw) {
-        // Migration ou initialisation avec valeurs par défaut
-        let oldImages = JSON.parse(localStorage.getItem('kcGalleryImages') || '[]');
-        if (oldImages.length > 0) {
-            savedImages = oldImages.map(src => ({ src: src, text: "Réalisation" }));
-            localStorage.removeItem('kcGalleryImages'); // Nettoyage
-        } else {
-            savedImages = [
-                { src: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=800", text: "Brushing Élégant" },
-                { src: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&q=80&w=800", text: "Coupe Carré" },
-                { src: "https://images.unsplash.com/photo-1595476108010-b4d1f10d5e43?auto=format&fit=crop&q=80&w=800", text: "Balayage" }
-            ];
-        }
-        localStorage.setItem('kcGalleryData', JSON.stringify(savedImages));
-    } else {
-        savedImages = JSON.parse(savedDataRaw);
-    }
+    onValue(galleryRef, (snapshot) => {
+        const data = snapshot.val();
+        savedImages = data || [];
+        renderGallery();
+    });
 
     function renderGallery() {
+        if(!adminGalleryGrid) return;
         adminGalleryGrid.innerHTML = '';
         
         if (savedImages.length === 0) {
@@ -108,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
             div.innerHTML = `
                 <img src="${imgObj.src}" alt="Photo de galerie">
                 <input type="text" value="${imgObj.text}" data-index="${index}" class="img-text-input" placeholder="Texte sur l'image">
-                <button class="btn-delete" data-index="${index}">🗑</button>
+                <button class="btn-delete" data-index="${index}" data-storage-path="${imgObj.storagePath || ''}">🗑</button>
             `;
             
             adminGalleryGrid.appendChild(div);
@@ -116,12 +124,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Suppressions
         document.querySelectorAll('.btn-delete').forEach(button => {
-            button.addEventListener('click', (e) => {
+            button.addEventListener('click', async (e) => {
                 const index = parseInt(e.target.getAttribute('data-index'));
-                if (confirm('Voulez-vous vraiment supprimer cette photo du site public ?')) {
+                const storagePath = e.target.getAttribute('data-storage-path');
+                
+                if (confirm('Voulez-vous vraiment supprimer cette photo de la base de données publique ?')) {
+                    // Supprimer du storage si c'est une image uploadée
+                    if(storagePath) {
+                        try {
+                            const imgRef = storageRef(storage, storagePath);
+                            await deleteObject(imgRef);
+                        } catch(err) {
+                            console.error("Erreur suppression image:", err);
+                        }
+                    }
+                    
                     savedImages.splice(index, 1);
-                    localStorage.setItem('kcGalleryData', JSON.stringify(savedImages));
-                    renderGallery();
+                    set(galleryRef, savedImages);
                 }
             });
         });
@@ -131,46 +150,54 @@ document.addEventListener('DOMContentLoaded', () => {
             input.addEventListener('change', (e) => {
                 const index = parseInt(e.target.getAttribute('data-index'));
                 savedImages[index].text = e.target.value;
-                localStorage.setItem('kcGalleryData', JSON.stringify(savedImages));
-                // Petit effet visuel pour confirmer la sauvegarde
-                e.target.style.borderColor = "#4ade80";
-                setTimeout(() => e.target.style.borderColor = "var(--color-pink)", 1000);
+                set(galleryRef, savedImages).then(() => {
+                    e.target.style.borderColor = "#4ade80";
+                    setTimeout(() => e.target.style.borderColor = "var(--color-pink)", 1000);
+                });
             });
         });
     }
 
-    renderGallery();
+    // 4. --- UPLOAD GALERIE VIA FIREBASE STORAGE ---
+    if(adminFileInput) {
+        adminFileInput.addEventListener('change', function() {
+            const files = this.files;
+            if (!files || files.length === 0) return;
 
-    // 4. --- UPLOAD GALERIE ---
-    adminFileInput.addEventListener('change', function() {
-        const files = this.files;
-        if (!files || files.length === 0) return;
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+                
+                // Petit indicateur de chargement
+                adminFileInput.previousElementSibling.innerText = "Téléchargement en cours...";
 
-        let filesProcessed = 0;
-
-        Array.from(files).forEach(file => {
-            if (!file.type.startsWith('image/')) {
-                filesProcessed++;
-                return;
-            }
-
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = function() {
-                // Ajouter sous le nouveau format objet
-                savedImages.unshift({ src: reader.result, text: "Nouvelle Réalisation" });
-                filesProcessed++;
-
-                if (filesProcessed === files.length) {
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = async function() {
                     try {
-                        localStorage.setItem('kcGalleryData', JSON.stringify(savedImages));
-                        renderGallery();
+                        // 1. Upload dans storage
+                        const fileName = 'gallery/' + Date.now() + '_' + file.name;
+                        const imgStorageRef = storageRef(storage, fileName);
+                        
+                        await uploadString(imgStorageRef, reader.result, 'data_url');
+                        const downloadUrl = await getDownloadURL(imgStorageRef);
+                        
+                        // 2. Ajouter dans Realtime Database
+                        savedImages.unshift({ 
+                            src: downloadUrl, 
+                            text: "Nouvelle Réalisation",
+                            storagePath: fileName
+                        });
+                        
+                        await set(galleryRef, savedImages);
+                        
+                    } catch(error) {
+                        alert("Erreur lors de l'upload: " + error.message);
+                    } finally {
                         adminFileInput.value = '';
-                    } catch (e) {
-                        alert("Erreur: Image trop lourde, la mémoire du navigateur est pleine ! Essayez de compresser l'image avant.");
+                        adminFileInput.previousElementSibling.innerText = "Formats acceptés : JPG, PNG";
                     }
-                }
-            };
+                };
+            });
         });
-    });
+    }
 });
