@@ -28,7 +28,7 @@ menuToggle.addEventListener('click', () => {
 // Fermer le menu au clic sur un lien (mobile)
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
-        if(window.innerWidth <= 768) {
+        if (window.innerWidth <= 768) {
             navLinks.classList.remove('active');
             const spans = menuToggle.querySelectorAll('span');
             spans[0].style.transform = 'none';
@@ -42,16 +42,16 @@ document.querySelectorAll('.nav-links a').forEach(link => {
 const galleryGrid = document.getElementById('galleryGrid');
 // Liste des photos dans le dossier /photos
 const localPhotos = [
-    "1434906464948649969.JPG", "2428389859622835158.JPG", "2442986605621758912.JPG", 
-    "295341576070224355.JPG", "5843544016896871159.JPG", "5878086769404283240.JPG", 
+    "1434906464948649969.JPG", "2428389859622835158.JPG", "2442986605621758912.JPG",
+    "295341576070224355.JPG", "5843544016896871159.JPG", "5878086769404283240.JPG",
     "6762477278438249809.JPG", "7081114608800117376.JPG", "7929391502948490040.JPG",
-    "8777824078707904769.HEIC", "8872561722974157855.jpg"
+    "8777824078707904769.HEIC", "BLONDPOLAIRE.JPG"
 ];
 
 function renderGallery() {
-    if(!galleryGrid) return;
+    if (!galleryGrid) return;
     galleryGrid.innerHTML = '';
-    
+
     localPhotos.forEach(filename => {
         const div = document.createElement('div');
         div.className = 'gallery-item';
