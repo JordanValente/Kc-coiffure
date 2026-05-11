@@ -359,3 +359,5 @@ if (showMoreBtn) {
 
 // Lancement immédiat au chargement de la page
 document.addEventListener('DOMContentLoaded', renderGallery);
+
+// End of script.js - added for new commit
