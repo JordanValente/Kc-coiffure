@@ -57,7 +57,10 @@ const localPhotos = [
     "1000020194.PNG",
     "1000020245.HEIC",
     "1000020288.JPG",
-    "file_000000006fb4820a95155bf63170aff3.PNG"
+    "file_000000006fb4820a95155bf63170aff3.PNG",
+    "balayage-meches-caramel.JPG",
+    "chignon-mariage.JPG",
+    "ombre-blond-miel.JPG"
 ];
 
 let shuffledPhotos = [];
