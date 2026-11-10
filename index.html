@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kc.coiffure | Coiffure à Domicile</title>
+    <title>Kc.coiffure | Coiffeuse à domicile autour de Cazilhac (34)</title>
     <meta name="description"
-        content="Découvrez Kc.coiffure. Prenez rendez-vous, consultez mes tarifs de coiffure à domicile et déposez vos photos d'inspiration.">
-    <!-- Google Fonts: Playfair Display pour les titres, Outfit pour le texte libre -->
+        content="Kc.coiffure, coiffeuse à domicile à Cazilhac et jusqu'à 50 km autour : coupe, couleur, balayage, lissage brésilien, chignon. Mardi matin, mercredi, vendredi et samedi, sur rendez-vous.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Manrope:wght@400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -17,181 +18,186 @@
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">Kc.coiffure</a>
-            <div class="nav-links">
-                <a href="#accueil">Accueil</a>
-                <a href="#galerie">Galerie & Inspirations</a>
-                <a href="#tarifs">Tarifs</a>
-                <a href="#contact" class="btn btn-outline">Contact</a>
-            </div>
-            <button class="menu-toggle" aria-label="Ouvrir le menu">
-                <span></span>
-                <span></span>
-                <span></span>
+    <header class="site-header" id="navbar">
+        <nav class="nav container" aria-label="Navigation principale">
+            <a href="#accueil" class="logo">Kc<span>.</span>coiffure</a>
+            <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navLinks">
+                <span></span><span></span>
             </button>
-        </div>
-    </nav>
-
-    <!-- Héros / Accueil -->
-    <header id="accueil" class="hero">
-        <div class="hero-content">
-            <span class="subtitle">Coiffure à Domicile</span>
-            <h1>L'art de la coiffure chez vous</h1>
-            <p>Laissez Kc.coiffure prendre soin de vous dans le confort de votre domicile. Une ambiance sur-mesure aux tons rose pâle et noir.</p>
-            <div class="hero-buttons">
-                <a href="#contact" class="btn btn-primary">Me Contacter</a>
-                <a href="#galerie" class="btn btn-secondary">Voir la Galerie</a>
+            <div class="nav-links" id="navLinks">
+                <a href="#prestations">Prestations</a>
+                <a href="#galerie">Réalisations</a>
+                <a href="#deroulement">Déroulement</a>
+                <a href="#contact" class="btn btn-dark">Prendre rendez-vous</a>
             </div>
-        </div>
+        </nav>
     </header>
 
-    <!-- Section Galerie -->
-    <section id="galerie" class="section gallery-section">
-        <div class="section-container">
-            <div class="section-header">
-                <h2>Mes Réalisations</h2>
-                <p>Découvrez mon travail et trouvez l'inspiration pour votre prochain rendez-vous.</p>
+    <main>
+        <!-- Héros -->
+        <section id="accueil" class="hero container">
+            <div class="hero-text">
+                <p class="eyebrow">Coiffeuse à domicile</p>
+                <h1>Le salon vient <em>à vous.</em></h1>
+                <p class="lead">Coupe, couleur, balayage, chignon : une prestation de salon, réalisée chez vous, avec le temps qu’il faut pour bien faire.</p>
+                <div class="btn-row">
+                    <a href="#contact" class="btn btn-accent">Réserver mon créneau</a>
+                    <a href="#galerie" class="btn btn-outline">Voir les réalisations</a>
+                </div>
+                <dl class="facts">
+                    <div><dt>Mar · Mer · Ven · Sam</dt><dd>Mardi matin uniquement · sur RDV</dd></div>
+                    <div><dt>À domicile</dt><dd>Cazilhac et 50 km autour</dd></div>
+                    <div><dt>Dès 15 €</dt><dd>Tarifs clairs, TTC</dd></div>
+                </dl>
             </div>
+            <div class="hero-visual">
+                <img class="hero-main" src="photos/1000016357.JPG" alt="Longs cheveux blonds ondulés réalisés par Kc.coiffure">
+                <img class="hero-small" src="photos/1000018485.JPG" alt="Chignon bohème orné de fleurs blanches">
+                <div class="hero-badge">
+                    <span>Signature</span>
+                    <strong>Balayage lumière</strong>
+                </div>
+            </div>
+        </section>
 
-            <!-- Gallery Grid -->
-            <div class="gallery-grid" id="galleryGrid"></div>
-            <div style="text-align:center; margin-top:30px;">
-                <button id="showMoreBtn" class="btn btn-outline" style="display:none;">Voir plus</button>
+        <!-- Bandeau -->
+        <div class="ribbon" aria-hidden="true">
+            <div class="container">
+                <span>Coupe</span><i>·</i><span>Couleur</span><i>·</i><span>Balayage</span><i>·</i><span>Lissage brésilien</span><i>·</i><span>Chignon</span><i>·</i><span>Soins</span>
             </div>
         </div>
-    </section>
 
-    <!-- Section Tarifs -->
-    <section id="tarifs" class="section pricing-section">
-        <div class="section-container">
-            <div class="section-header">
-                <h2>Mes Prestations</h2>
-                <p>Tarifs TTC sur cheveux mi-longs.</p>
+        <!-- Prestations -->
+        <section id="prestations" class="section container">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow">La carte</p>
+                    <h2>Prestations &amp; tarifs</h2>
+                </div>
+                <p class="section-note">Tarifs TTC, sur cheveux mi-longs. Un doute sur votre longueur ou votre projet ? Demandez simplement.</p>
             </div>
 
-            <div class="pricing-grid">
-                <!-- Card 1 -->
-                <div class="pricing-card">
-                    <div class="pricing-card-header">
-                        <h3>Prestations Base</h3>
-                        <div class="price"><span>À la carte</span></div>
-                    </div>
-                    <ul class="pricing-features" id="publicPricingBase">
-                        <li style="display: flex; justify-content: space-between; align-items: flex-start;"><span>Coupe Femme<br><small style="font-weight:400; color:#aaa;">Courts 25€ · Mi-longs 30€ · Longs 35€</small></span></li>
-                        <li style="display: flex; justify-content: space-between;"><span>Coupe Homme</span>
-                            <strong>15€</strong></li>
-                        <li style="display: flex; justify-content: space-between;"><span>Brushing</span>
-                            <strong>20€</strong></li>
-                        <li style="display: flex; justify-content: space-between;"><span>Couleur</span>
-                            <strong>55€</strong></li>
+            <div class="price-grid">
+                <article class="price-card">
+                    <header><h3>Coupe &amp; coiffage</h3><span>01</span></header>
+                    <ul>
+                        <li><span>Coupe femme<small>Courts 25 € · Mi-longs 30 € · Longs 35 €</small></span><b>dès 25 €</b></li>
+                        <li><span>Coupe homme</span><b>15 €</b></li>
+                        <li><span>Brushing</span><b>20 €</b></li>
+                        <li><span>Couleur</span><b>55 €</b></li>
                     </ul>
-                    <a href="#contact" class="btn btn-outline btn-full">Choisir</a>
-                </div>
+                </article>
 
-                <!-- Card 2 -->
-                <div class="pricing-card highlighted">
-                    <div class="best-seller">Détente</div>
-                    <div class="pricing-card-header">
-                        <h3>Soins</h3>
-                        <div class="price"><span>Douceur</span></div>
-                    </div>
-                    <ul class="pricing-features" id="publicPricingSoins">
-                        <li style="display: flex; justify-content: space-between;"><span>Soin Classique</span>
-                            <strong>5€</strong></li>
-                        <li style="display: flex; justify-content: space-between;"><span>Soin Profond</span>
-                            <strong>35€</strong></li>
-                        <li style="display: flex; justify-content: space-between;"><span>Shampoing</span>
-                            <strong>5€</strong></li>
+                <article class="price-card price-card--dark">
+                    <header><h3>Techniques</h3><span>02 · Le savoir-faire</span></header>
+                    <ul>
+                        <li><span>Ombré mi-longueur</span><b>45 €</b></li>
+                        <li><span>Mèches papier</span><b>50 €</b></li>
+                        <li><span>Patine</span><b>25 €</b></li>
+                        <li><span>Lissage brésilien<small>Mi-longs ; plus long, me consulter</small></span><b>dès 80 €</b></li>
+                        <li><span>Pose de rajouts<small>Cheveux naturels</small></span><b class="quote">Sur devis</b></li>
                     </ul>
-                    <a href="#contact" class="btn btn-primary btn-full">Choisir</a>
-                </div>
+                </article>
 
-                <!-- Card 3 -->
-                <div class="pricing-card">
-                    <div class="pricing-card-header">
-                        <h3>Techniques</h3>
-                        <div class="price"><span>Sur-mesure</span></div>
-                    </div>
-                    <ul class="pricing-features" id="publicPricingTech">
-                        <li style="display: flex; justify-content: space-between;"><span>Ombré Mi Longueur</span>
-                            <strong>45€</strong></li>
-                        <li style="display: flex; justify-content: space-between;"><span>Mèche Papier</span>
-                            <strong>50€</strong></li>
-                        <li style="display: flex; align-items: center; justify-content: space-between;">
-                            <span style="display: flex; flex-direction: column;">
-                                <span>Lissage brésilien</span>
-                                <small style="font-size: 0.8em; color: var(--color-gray);">À partir de, sur cheveux mi-longs (plus, me consulter)</small>
-                            </span>
-                            <strong>80€</strong>
-                        </li>
-                        <li style="display: flex; align-items: center; justify-content: space-between;">
-                            <span style="display: flex; flex-direction: column;">
-                                <span>Pose de rajouts</span>
-                                <small style="font-size: 0.8em; color: var(--color-gray);">Cheveux naturels</small>
-                            </span>
-                            <strong>Me consulter</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between;"><span>Patine</span>
-                            <strong>25€</strong></li>
+                <article class="price-card price-card--pink">
+                    <header><h3>Soins</h3><span>03</span></header>
+                    <ul>
+                        <li><span>Shampoing</span><b>5 €</b></li>
+                        <li><span>Soin classique</span><b>5 €</b></li>
+                        <li><span>Soin profond</span><b>35 €</b></li>
                     </ul>
-                    <a href="#contact" class="btn btn-outline btn-full">Choisir</a>
+                    <img src="photos/2442986605621758912.JPG" alt="Cheveux lisses et brillants après soin" loading="lazy">
+                </article>
+            </div>
+        </section>
+
+        <!-- Galerie -->
+        <section id="galerie" class="gallery-section">
+            <div class="section container">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Réalisations</p>
+                        <h2>Le carnet de <em>looks</em></h2>
+                    </div>
+                    <div class="filters" role="group" aria-label="Filtrer les réalisations">
+                        <button type="button" class="chip is-active" data-filter="tous" aria-pressed="true">Tout</button>
+                        <button type="button" class="chip" data-filter="couleur" aria-pressed="false">Couleur</button>
+                        <button type="button" class="chip" data-filter="coiffage" aria-pressed="false">Coiffage</button>
+                        <button type="button" class="chip" data-filter="coupe" aria-pressed="false">Coupe</button>
+                    </div>
+                </div>
+                <div class="gallery-grid" id="galleryGrid"></div>
+                <div class="center">
+                    <button type="button" id="showMoreBtn" class="btn btn-outline">Voir plus de réalisations</button>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Section Contact -->
-    <section id="contact" class="section booking-section">
-        <div class="booking-container">
-            <div class="booking-content" style="text-align: center;">
-                <h2>Contactez-moi</h2>
-                <p>Pour prendre rendez-vous ou pour toute information, n'hésitez pas à me joindre directement :</p>
-                <div style="margin: 40px 0; font-size: 1.2rem;">
-                    <p style="margin-bottom: 20px;">
-                        <span style="color: var(--color-pink); font-weight: bold; font-size: 1.5rem;">📞
-                            Téléphone</span><br>
-                        <strong>06 13 19 58 04</strong>
-                    </p>
-                    <p>
-                        <span style="color: var(--color-pink); font-weight: bold; font-size: 1.5rem;">✉️
-                            Email</span><br>
-                        <strong><a href="mailto:kc.coiffureadomicile@gmail.com"
-                                style="text-decoration: underline;">kc.coiffureadomicile@gmail.com</a></strong>
-                    </p>
-                </div>
-                <a href="mailto:kc.coiffureadomicile@gmail.com" class="btn btn-primary">Envoyer un
-                    email</a>
+        <!-- Déroulement -->
+        <section id="deroulement" class="section container steps-wrap">
+            <div class="steps-intro">
+                <p class="eyebrow">À domicile</p>
+                <h2>Comment se passe un rendez-vous</h2>
+                <img src="photos/7081114608800117376.JPG" alt="Coiffure mi-attachée aux longues ondulations" loading="lazy">
             </div>
-        </div>
-    </section>
+            <ol class="steps">
+                <li><span class="num">01</span><div><h3>Vous me contactez</h3><p>Par téléphone ou par email, avec la prestation souhaitée et, si vous le voulez, une photo d’inspiration.</p></div></li>
+                <li><span class="num">02</span><div><h3>On fixe le créneau</h3><p>Le mardi matin, le mercredi, le vendredi ou le samedi. Je vous confirme le tarif selon votre longueur avant de venir.</p></div></li>
+                <li><span class="num">03</span><div><h3>Je viens chez vous</h3><p>J’apporte tout le matériel. Vous profitez d’une prestation de salon, sans vous déplacer.</p></div></li>
+            </ol>
+        </section>
 
-    <!-- Footer -->
+        <!-- Contact -->
+        <section id="contact" class="contact">
+            <div class="container contact-inner">
+                <div class="contact-text">
+                    <p class="eyebrow eyebrow--light">Rendez-vous</p>
+                    <h2>Envie d’un <em>changement</em> ?</h2>
+                    <p>Appelez ou écrivez-moi : je vous réponds rapidement pour trouver un créneau.</p>
+                    <div class="btn-row">
+                        <a href="tel:+33613195804" class="btn btn-pink">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+                            06 13 19 58 04</a>
+                        <a href="mailto:kc.coiffureadomicile@gmail.com" class="btn btn-ghost">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                            Écrire un email</a>
+                    </div>
+                </div>
+                <div class="contact-photos">
+                    <img src="photos/chignon-mariage.JPG" alt="Chignon brun orné d’une barrette fleur" loading="lazy">
+                    <img src="photos/5843544016896871159.JPG" alt="Balayage caramel sur cheveux lisses" loading="lazy">
+                </div>
+            </div>
+        </section>
+    </main>
+
     <footer class="footer">
-        <div class="footer-content">
+        <div class="container footer-inner">
             <div class="footer-brand">
-                <h3>Kc.coiffure</h3>
-                <p>Votre experte coiffure à domicile.</p>
+                <span class="logo logo--light">Kc<span>.</span>coiffure</span>
+                <p>Coiffure à domicile uniquement, sur rendez-vous : mardi matin, mercredi, vendredi et samedi.</p>
             </div>
-            <div class="footer-links">
+            <div>
                 <h4>Contact</h4>
-                <p>Intervention à votre domicile</p>
-                <p>06 13 19 58 04</p>
-                <p>kc.coiffureadomicile@gmail.com</p>
+                <a href="tel:+33613195804">06 13 19 58 04</a>
+                <a href="mailto:kc.coiffureadomicile@gmail.com">kc.coiffureadomicile@gmail.com</a>
             </div>
-            <div class="footer-hours">
-                <h4>Disponibilités</h4>
-                <p>Du Lundi au Samedi</p>
-                <p>Sur rendez-vous uniquement</p>
+            <div>
+                <h4>Zone</h4>
+                <p>Cazilhac (34) et alentours</p>
+                <p>Jusqu’à 50 km</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Kc.coiffure. Tous droits réservés.</p>
-        </div>
+        <div class="container footer-bottom">© 2026 Kc.coiffure · Tous droits réservés</div>
     </footer>
 
-    <script type="module" src="script.js"></script>
+    <!-- Barre d'action mobile -->
+    <div class="mobile-bar">
+        <a href="tel:+33613195804" class="btn btn-accent">Appeler</a>
+        <a href="mailto:kc.coiffureadomicile@gmail.com" class="btn btn-outline">Email</a>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 
 </html>
